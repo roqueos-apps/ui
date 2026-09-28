@@ -4,6 +4,17 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e
 usa [versionamento semântico](https://semver.org/lang/pt-BR/): componente ou prop nova é
 versão menor; mudar o que um componente faz com a mesma prop, ou tirar uma, é versão maior.
 
+## [0.3.0] - 2026-09-28
+
+### Adicionado
+
+- 20 ícones para a Lousa (Goal 28): `dashboard`, `save`, `undo`, `redo`, `zoom_out`, `zoom_in`,
+  `fit_screen`, `draw`, `edit`, `colorize`, `near_me`, `pan_tool`, `brush`, `horizontal_rule`,
+  `arrow_right_alt`, `crop_square`, `circle`, `change_history`, `cleaning_services` e `menu`.
+  São 56 no total, do mesmo `@quasar/extras` 1.18.0. A borracha da Lousa usava `ink_eraser`,
+  que é do Material Symbols e não existe no Material Icons (nem na fonte que o RoqueOS carrega):
+  entra `cleaning_services` no lugar.
+
 ## [0.2.1] - 2026-09-28
 
 ### Corrigido
