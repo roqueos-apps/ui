@@ -4,6 +4,14 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e
 usa [versionamento semântico](https://semver.org/lang/pt-BR/): componente ou prop nova é
 versão menor; mudar o que um componente faz com a mesma prop, ou tirar uma, é versão maior.
 
+## [0.4.0] - 2026-09-28
+
+### Adicionado
+
+- 14 ícones para a Câmera (Goal 28): `photo_camera`, `flash_on`, `flash_off`, `cameraswitch`,
+  `photo_library`, `videocam`, `timer`, `aspect_ratio`, `hd`, `grid_on`, `flip`, `straighten`,
+  `no_photography` e `videocam_off`. São 70 no total, do mesmo `@quasar/extras` 1.18.0.
+
 ## [0.3.0] - 2026-09-28
 
 ### Adicionado
