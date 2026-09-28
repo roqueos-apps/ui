@@ -4,6 +4,14 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e
 usa [versionamento semântico](https://semver.org/lang/pt-BR/): componente ou prop nova é
 versão menor; mudar o que um componente faz com a mesma prop, ou tirar uma, é versão maior.
 
+## [0.2.0] - 2026-09-28
+
+### Adicionado
+
+- 11 ícones para o QR Code (Onda 4b do Goal 28): `qr_code_2`, `download`, `content_copy`,
+  `share`, `history`, `email`, `phone`, `wifi`, `sms`, `text_fields` e `delete_sweep`. São 35
+  no total, do mesmo `@quasar/extras` 1.18.0.
+
 ## [0.1.0] - 2026-09-27
 
 Nasce com o que as Notas usam, para elas saírem do RoqueOS (Onda 4a do Goal 28).
