@@ -9,6 +9,7 @@ O único desenho de terceiro são os ícones de `src/icones.js`: os traços do
 `scripts/icones.mjs`, que registra a versão de onde vieram no cabeçalho do arquivo gerado. São
 os mesmos traços da fonte que o RoqueOS usa para desenhar ícone pelo nome.
 
-| caminho         | licença    | origem                                               |
-| --------------- | ---------- | ---------------------------------------------------- |
-| `src/icones.js` | Apache-2.0 | Material Icons (Google), via `@quasar/extras` 1.18.0 |
+| caminho         | licença    | origem                                                                                                              |
+| --------------- | ---------- | ------------------------------------------------------------------------------------------------------------------- |
+| `src/icones.js` | Apache-2.0 | Material Icons (Google), via `@quasar/extras` 1.18.0                                                                |
+| `docs/capa.jpg` | MIT        | autoral: print da vitrine do `yarn dev` (dev/Vitrine.vue), tirado com o Playwright em 28/09/2026; não vai no pacote |

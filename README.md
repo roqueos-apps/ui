@@ -5,6 +5,8 @@ o interruptor, a folha de ajustes, a confirmação e o estado vazio, para um app
 do RoqueOS parecer e se comportar como um de dentro. Só Vue: sem Quasar e sem nada do
 RoqueOS.
 
+![A vitrine do kit no yarn dev: os ícones, os botões, o interruptor, o estado vazio e a folha de ajustes aberta](docs/capa.jpg)
+
 _English below._
 
 ## Por que existe
