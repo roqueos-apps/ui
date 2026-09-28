@@ -1,6 +1,6 @@
 {
   "name": "@roqueos-apps/ui",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "O kit de interface dos apps do RoqueOS: ícone pelo nome, botão, interruptor, folha de ajustes, confirmação e estado vazio, sem Quasar, com as variáveis do tema do contrato do app-sdk.",
   "license": "MIT",

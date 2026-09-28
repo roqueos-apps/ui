@@ -4,6 +4,17 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e
 usa [versionamento semântico](https://semver.org/lang/pt-BR/): componente ou prop nova é
 versão menor; mudar o que um componente faz com a mesma prop, ou tirar uma, é versão maior.
 
+## [0.2.1] - 2026-09-28
+
+### Corrigido
+
+- **O foco não cai mais no `body` quando quem abriu a sobreposição não aceita mais foco.** No QR
+  Code, o "Limpar" da folha do histórico abre a confirmação e fica desabilitado quando o
+  histórico esvazia: o foco voltava para o `body`, e o Esc e o Tab não chegavam mais na folha,
+  que continuava aberta (medido no QA do `yarn dev`, Chromium). Agora ele vai para o primeiro
+  focável da sobreposição onde quem abriu mora, ou para ela mesma. Teste em `test/foco.spec.js`,
+  com 2 mutantes mortos.
+
 ## [0.2.0] - 2026-09-28
 
 ### Adicionado

@@ -21,6 +21,24 @@ const FOCAVEL = [
   '[tabindex]:not([tabindex="-1"])',
 ].join(',')
 
+/** Se o elemento ainda está na página e aceita foco. */
+const aceitaFoco = (e) =>
+  Boolean(e) &&
+  e.isConnected &&
+  typeof e.focus === 'function' &&
+  !e.disabled &&
+  !e.closest('[inert]')
+
+/**
+ * Para onde vai o foco quando quem abriu não aceita mais: o primeiro focável da sobreposição
+ * (diálogo) em que ele mora, ou ela mesma se aceitar foco. Fora de sobreposição, nenhum.
+ */
+function focoDeRecuo(e) {
+  const dialogo = e?.isConnected ? e.closest('[role="dialog"],[role="alertdialog"]') : null
+  if (!dialogo) return null
+  return focaveis(dialogo)[0] ?? (dialogo.hasAttribute('tabindex') ? dialogo : null)
+}
+
 /** Os elementos que recebem foco pelo Tab dentro de `el`, na ordem do documento. */
 export function focaveis(el) {
   return [...el.querySelectorAll(FOCAVEL)].filter((e) => !e.hasAttribute('inert'))
@@ -74,8 +92,12 @@ export function prenderFoco(el, { inicial = null } = {}) {
     // clicou em outro lugar do app enquanto fechava, o foco fica onde ela pôs.
     const agora = doc.activeElement
     const perdido = !agora || agora === doc.body || el.contains(agora)
-    if (perdido && antes && typeof antes.focus === 'function' && antes.isConnected) {
-      antes.focus({ preventScroll: true })
-    }
+    if (!perdido) return
+    // Quem abriu pode não aceitar mais o foco: o "Limpar" do histórico que abriu a
+    // confirmação fica desabilitado quando o histórico esvazia. Aí o foco vai para a
+    // sobreposição onde ele mora (a folha do histórico), e não para o `body`, de onde o Esc
+    // e o Tab não chegam mais nela (medido no QR Code em 28/09/2026).
+    const destino = aceitaFoco(antes) ? antes : focoDeRecuo(antes)
+    destino?.focus({ preventScroll: true })
   }
 }
