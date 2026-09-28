@@ -38,14 +38,14 @@ flowchart LR
 
 ## Os componentes
 
-| Componente       | Para quê                                   | O que garante                                                                                     |
-| ---------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------- |
-| `RosIcone`       | ícone do Material Icons pelo nome (`nome`) | os traços da fonte que o RoqueOS usa; nome fora de `ICONES` é aviso do Vue; decorativo            |
-| `RosBotao`       | `primario`, `fantasma` ou `perigo`         | botão só de ícone leva `rotulo` como `aria-label`; alternar (`ligado`) diz `aria-pressed`         |
-| `RosInterruptor` | liga e desliga (`v-model`)                 | `role="switch"` com `aria-checked`; Espaço, Enter e o OK da TV alternam; anda ao contrário em RTL |
-| `RosFolha`       | ajustes e escolhas, subindo de baixo       | diálogo modal com título; foco entra, fica e volta; Esc, véu e fechar fecham                      |
-| `RosConfirmar`   | a pergunta antes do que não tem volta      | `alertdialog`; abre com o foco no Cancelar; Esc e véu cancelam; `perigo` pinta de vermelho        |
-| `RosVazio`       | o estado vazio ("Nenhuma nota ainda")      | `role="status"`, ícone na cor do app, ação no slot                                                |
+| Componente       | Para quê                                                               | O que garante                                                                                                                    |
+| ---------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `RosIcone`       | ícone do Material Icons pelo nome (`nome`)                             | os traços da fonte que o RoqueOS usa; nome fora de `ICONES` é aviso do Vue; decorativo                                           |
+| `RosBotao`       | `primario`, `fantasma` ou `perigo`                                     | botão só de ícone leva `rotulo` como `aria-label`; alternar (`ligado`) diz `aria-pressed`                                        |
+| `RosInterruptor` | liga e desliga (`v-model`)                                             | `role="switch"` com `aria-checked`; Espaço, Enter e o OK da TV alternam; anda ao contrário em RTL                                |
+| `RosFolha`       | ajustes e escolhas, subindo de baixo                                   | diálogo modal com título; foco entra, fica e volta; Esc, véu e fechar fecham                                                     |
+| `RosConfirmar`   | a pergunta antes do que não tem volta                                  | `alertdialog`; abre com o foco no Cancelar; Esc e véu cancelam; `perigo` pinta de vermelho                                       |
+| `RosVazio`       | o estado vazio ("Nenhuma nota ainda"), e o carregando com `carregando` | `role="status"`, ícone na cor do app, ação no slot; `carregando` põe a barra que corre (parada com `leve` ou movimento reduzido) |
 
 `prenderFoco(el)` e `focaveis(el)` também saem do pacote, para o app que precisar prender o
 foco num painel próprio.

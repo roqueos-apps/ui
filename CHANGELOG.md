@@ -4,6 +4,16 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e
 usa [versionamento semântico](https://semver.org/lang/pt-BR/): componente ou prop nova é
 versão menor; mudar o que um componente faz com a mesma prop, ou tirar uma, é versão maior.
 
+## [0.5.0] - 2026-09-28
+
+### Adicionado
+
+- **`RosVazio` com `carregando`**: a barra que corre embaixo do título, o `ROSAppLoader
+state="loading"` do RoqueOS. A Câmera ("Iniciando a câmera") e a Lousa ("Carregando quadro")
+  tinham essa barra dentro do núcleo e ficaram com o estado parado na saída; a auditoria de
+  paridade de 28/09/2026 achou. Com `leve` (o perfil leve do sistema) ou com movimento reduzido,
+  a barra fica parada. Teste em `test/componentes.spec.js`, 3 mutantes mortos.
+
 ## [0.4.0] - 2026-09-28
 
 ### Adicionado

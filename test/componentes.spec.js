@@ -86,6 +86,20 @@ describe('RosVazio', () => {
     expect(w.text()).toContain('Crie a primeira')
     expect(w.find('button').text()).toBe('Nova nota')
     expect(w.find('svg').exists()).toBe(true)
+    expect(w.find('.rui-vazio__barra').exists()).toBe(false)
+  })
+
+  test('carregando mostra a barra que corre, parada no perfil leve', async () => {
+    // O `ROSAppLoader state="loading"` do RoqueOS tinha a barra; a Câmera e a Lousa a perderam
+    // na saída do núcleo (auditoria de paridade de 28/09/2026).
+    const w = mount(RosVazio, { props: { titulo: 'Iniciando a câmera', carregando: true } })
+    const barra = w.find('.rui-vazio__barra')
+    expect(barra.exists()).toBe(true)
+    expect(barra.attributes('aria-hidden')).toBe('true')
+    expect(barra.find('span').exists()).toBe(true)
+    expect(barra.classes()).not.toContain('rui-vazio__barra--parada')
+    await w.setProps({ leve: true })
+    expect(w.find('.rui-vazio__barra').classes()).toContain('rui-vazio__barra--parada')
   })
 })
 
