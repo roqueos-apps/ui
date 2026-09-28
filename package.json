@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@eslint/js": "9.14.0",
-    "@roqueos-apps/app-sdk": "github:roqueos-apps/app-sdk#644ba21",
+    "@roqueos-apps/app-sdk": "github:roqueos-apps/app-sdk#v0.2.0",
     "@vitejs/plugin-vue": "6.0.3",
     "@vue/test-utils": "2.4.6",
     "eslint": "9.14.0",

@@ -84,6 +84,10 @@ teclado do iPhone aberto entram no QA de aparelho de cada app.
 { "dependencies": { "@roqueos-apps/ui": "github:roqueos-apps/ui#v0.1.0" } }
 ```
 
+Enquanto o repo for privado, o atalho `github:` (que baixa por HTTPS) não entra sem token, e
+quem instala usa a chave SSH: `"git+ssh://git@github.com/roqueos-apps/ui.git#v0.1.0"`. É o
+que as Notas e o RoqueOS fazem hoje. Sempre por tag, nunca por branch.
+
 ```vue
 <template>
   <div class="meu-app">
