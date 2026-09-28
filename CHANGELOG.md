@@ -4,6 +4,17 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e
 usa [versionamento semântico](https://semver.org/lang/pt-BR/): componente ou prop nova é
 versão menor; mudar o que um componente faz com a mesma prop, ou tirar uma, é versão maior.
 
+## [0.6.0] - 2026-09-28
+
+### Adicionado
+
+- **`RosFolha` fecha arrastando a alça para baixo**, como o `ROSBottomSheet` do RoqueOS, com o
+  mesmo limite (110 px): menos que isso, a folha volta ao lugar. As Notas (ajustes), a Câmera
+  (ajustes) e o Quadro Branco (a folha do celular) fechavam assim dentro do núcleo e perderam o
+  gesto na saída; a auditoria de paridade de 28/09/2026 achou. O arraste escuta só a alça, que
+  prende o ponteiro: nada vai para o `window` nem para o `document`. Quem usa teclado continua
+  com o Esc e o fechar. Teste em `test/componentes.spec.js`, 5 mutantes mortos.
+
 ## [0.5.0] - 2026-09-28
 
 ### Adicionado

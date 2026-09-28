@@ -119,6 +119,39 @@ describe('RosFolha', () => {
     expect(s.aberta()).toBe(false)
   })
 
+  test('arrastar a alça para baixo fecha; o arraste curto volta a folha ao lugar', async () => {
+    // O `ROSBottomSheet` do RoqueOS fechava assim, e as Notas, a Câmera e o Quadro Branco o
+    // usavam: a auditoria de paridade de 28/09/2026 achou o gesto perdido na saída do núcleo.
+    const s = await montadorDe(RosFolha, { titulo: 'Ajustes', rotuloFechar: 'Fechar' })()
+    await s.abrir()
+    const puxador = document.querySelector('.rui-folha__puxador')
+    const ponteiro = (tipo, y) =>
+      puxador.dispatchEvent(new MouseEvent(tipo, { clientY: y, bubbles: true }))
+    ponteiro('pointerdown', 100)
+    ponteiro('pointermove', 150)
+    await nextTick()
+    expect(s.dialogo().style.transform).toBe('translateY(50px)')
+    // Para cima não passa do lugar.
+    ponteiro('pointermove', 40)
+    await nextTick()
+    expect(s.dialogo().style.transform).toBe('')
+    ponteiro('pointermove', 210)
+    ponteiro('pointerup', 210)
+    await nextTick()
+    expect([s.aberta(), s.dialogo().style.transform]).toEqual([true, ''])
+    ponteiro('pointerdown', 100)
+    ponteiro('pointermove', 211)
+    ponteiro('pointerup', 211)
+    await nextTick()
+    expect(s.aberta()).toBe(false)
+    // Mover sem ter apertado não arrasta.
+    await s.abrir()
+    ponteiro('pointermove', 400)
+    ponteiro('pointerup', 400)
+    await nextTick()
+    expect([s.aberta(), s.dialogo().style.transform]).toEqual([true, ''])
+  })
+
   test('mora dentro do app, não no body', async () => {
     const s = await montadorDe(RosFolha, { titulo: 'Ajustes', rotuloFechar: 'Fechar' })()
     await s.abrir()

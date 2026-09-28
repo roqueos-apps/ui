@@ -14,8 +14,18 @@
         aria-modal="true"
         :aria-labelledby="idDoTitulo"
         tabindex="-1"
+        :style="arraste > 0 ? { transform: `translateY(${arraste}px)`, transition: 'none' } : null"
       >
-        <span class="rui-folha__alca" aria-hidden="true" />
+        <div
+          class="rui-folha__puxador"
+          aria-hidden="true"
+          @pointerdown="comecarArraste"
+          @pointermove="arrastar"
+          @pointerup="soltar"
+          @pointercancel="cancelarArraste"
+        >
+          <span class="rui-folha__alca" />
+        </div>
         <header class="rui-folha__cabeca">
           <RosIcone v-if="icone" :nome="icone" :tamanho="20" class="rui-folha__icone" />
           <h2 :id="idDoTitulo" class="rui-folha__titulo">{{ titulo }}</h2>
@@ -36,7 +46,9 @@
 // (o motivo está em `src/foco.js`). A raiz do app precisa de `position: relative` (ou
 // qualquer posição que não seja `static`) para a folha se prender a ela.
 //
-// Fecha pelo Esc, pelo véu e pelo botão de fechar, e devolve o foco para quem abriu.
+// Fecha pelo Esc, pelo véu, pelo botão de fechar e arrastando a alça para baixo, e devolve o
+// foco para quem abriu. O arrastar é do dedo (quem usa teclado tem o Esc e o fechar), e
+// escuta só a alça, que prende o ponteiro: nada vai para o `window` nem para o `document`.
 import { ref, useId } from 'vue'
 import RosIcone from './RosIcone.vue'
 import RosBotao from './RosBotao.vue'
@@ -55,6 +67,33 @@ const emit = defineEmits(['update:modelValue'])
 const painel = ref(null)
 const idDoTitulo = `rui-folha-${useId()}`
 const fechar = () => emit('update:modelValue', false)
+
+// Arrastar a alça para baixo além disto fecha; menos que isto, a folha volta. O mesmo limite
+// do `ROSBottomSheet`, que as Notas, a Câmera e o Quadro Branco usavam dentro do RoqueOS.
+const LIMITE_DO_ARRASTE = 110
+const arraste = ref(0)
+let inicioDoArraste = null
+
+function comecarArraste(evento) {
+  inicioDoArraste = evento.clientY
+  arraste.value = 0
+  evento.currentTarget?.setPointerCapture?.(evento.pointerId)
+}
+function arrastar(evento) {
+  if (inicioDoArraste === null) return
+  // Para cima fica negativo, e a folha não sobe além do lugar (o `style` só desce).
+  arraste.value = evento.clientY - inicioDoArraste
+}
+function soltar() {
+  if (inicioDoArraste === null) return
+  const passou = arraste.value > LIMITE_DO_ARRASTE
+  cancelarArraste()
+  if (passou) fechar()
+}
+function cancelarArraste() {
+  inicioDoArraste = null
+  arraste.value = 0
+}
 
 useSobreposicao(() => props.modelValue, painel)
 </script>
@@ -92,11 +131,19 @@ useSobreposicao(() => props.modelValue, painel)
   outline: none;
 }
 
+.rui-folha__puxador {
+  display: flex;
+  justify-content: center;
+  align-self: stretch;
+  margin: -6px -16px 0;
+  padding: 10px 0 12px;
+  cursor: grab;
+  touch-action: none;
+}
+
 .rui-folha__alca {
-  align-self: center;
   width: 36px;
   height: 4px;
-  margin: 4px 0 8px;
   border-radius: 2px;
   background: rgba(var(--ros-fill-rgb, 255, 255, 255), 0.25);
 }
