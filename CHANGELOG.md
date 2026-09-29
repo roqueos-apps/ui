@@ -4,6 +4,14 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e
 usa [versionamento semântico](https://semver.org/lang/pt-BR/): componente ou prop nova é
 versão menor; mudar o que um componente faz com a mesma prop, ou tirar uma, é versão maior.
 
+## [Não lançado]
+
+### Mudado
+
+- O repo abriu (29/09/2026). O README deixa de mandar instalar pela chave SSH: o `github:`
+  baixa por HTTPS, sem chave, e é como as Notas, o QR Code, o Quadro Branco e a Câmera instalam o
+  kit agora.
+
 ## [0.6.0] - 2026-09-28
 
 ### Adicionado
