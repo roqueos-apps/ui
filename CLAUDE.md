@@ -1,7 +1,8 @@
 # Kit de interface (`@roqueos-apps/ui`)
 
 Os componentes que os apps da organização roqueos-apps usam para parecer e se comportar como o
-RoqueOS. Leia o README antes de mudar qualquer coisa.
+RoqueOS. Leia o README antes de mudar qualquer coisa. O mapa da documentação está em
+`docs/INDEX.md` (par em português em `docs/pt-BR/`).
 
 - Gate: `yarn verificar` (o mesmo do CI e do pre-push).
 - O kit só importa `vue` e arquivo dele. Nada de Quasar, nada de `src/` do RoqueOS.
