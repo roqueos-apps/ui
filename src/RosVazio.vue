@@ -1,5 +1,5 @@
 <template>
-  <div class="rui-vazio" :style="acento ? { '--rui-acento': acento } : null" role="status">
+  <div class="rui-vazio" :style="estiloDoAcento(acento)" role="status">
     <div v-if="icone" class="rui-vazio__icone">
       <RosIcone :nome="icone" :tamanho="32" />
     </div>
@@ -24,6 +24,7 @@
 // acontecendo (a Câmera iniciando, a Lousa abrindo o quadro). Com `leve` (o perfil leve do
 // sistema) ou com movimento reduzido, a barra fica parada.
 import RosIcone from './RosIcone.vue'
+import { estiloDoAcento } from './acento.js'
 
 defineProps({
   titulo: { type: String, required: true },
@@ -54,7 +55,12 @@ defineProps({
   height: 64px;
   margin-bottom: 8px;
   border-radius: 20px;
-  color: var(--rui-acento, #007aff);
+  /* O acento misturado à cor do texto do tema: 4,5:1 nos dois (`src/acento.js`). */
+  color: color-mix(
+    in srgb,
+    var(--rui-acento, #007aff) var(--rui-acento-mistura, 72%),
+    rgb(var(--ros-text-rgb, 255, 255, 255))
+  );
   background: rgba(var(--ros-fill-rgb, 255, 255, 255), 0.06);
   border: 1px solid rgba(var(--ros-line-rgb, 255, 255, 255), 0.08);
 }

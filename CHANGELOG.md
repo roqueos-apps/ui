@@ -12,6 +12,34 @@ versão menor; mudar o que um componente faz com a mesma prop, ou tirar uma, é 
   baixa por HTTPS, sem chave, e é como as Notas, o QR Code, o Quadro Branco e a Câmera instalam o
   kit agora.
 
+## [0.7.0] - 2026-11-22
+
+### Corrigido
+
+- **O texto do kit passa de 4,5:1 no tema claro e no escuro.** O RoqueOS ganhou o tema claro
+  (`data-ros-tema="claro"`, 22/11/2026), que vira texto, preenchimento e linha para preto e a
+  superfície para 240, 240, 243, e o levantamento achou o kit contando com o fundo escuro:
+  - `RosBotao` primário: o texto era preto fixo. No azul padrão dava 5,2:1, mas num acento
+    escuro reprovava (o roxo #5856d6 dava 3,7:1). Sem `acento`, o primário passa a ser o azul de
+    preenchimento do RoqueOS (#0062cc) com texto branco, 5,8:1; com `acento`, o kit escolhe
+    branco ou preto pela cor do app, e o melhor dos dois nunca fica abaixo de 4,58:1.
+  - A cor do app como tinta (o `RosBotao` ligado e os ícones da `RosFolha`, da `RosConfirmar` e
+    do `RosVazio`): o #007aff dava 2,8:1 sobre o fundo do botão ligado no claro e 3,1:1 no
+    escuro. Agora vai misturada à cor do texto do tema (`color-mix` com `--ros-text-rgb`), que
+    clareia no escuro e escurece no claro, na maior proporção que passa nos dois. Para o azul
+    padrão: 4,5:1 no escuro e 4,8:1 no claro sobre o fundo do botão ligado, 6,1:1 e 6,0:1
+    sobre a superfície (eram 4,2:1 e 3,5:1).
+  - `RosBotao` perigo: o vermelho do escuro (255, 59, 48) dava 3,5:1 com branco. O fundo vai a
+    80% do vermelho do tema com preto: 5,2:1 no escuro e 8,6:1 no claro.
+- A conta mora em `src/acento.js` e só põe propriedades do kit no `style`
+  (`--rui-acento-tinta`, `--rui-acento-mistura`), nenhuma variável nova do contrato. O
+  `test/contraste.spec.js` lê o CSS de cada componente, resolve as variáveis do tema escuro, do
+  claro e as reservas, e mede com oito cores de app; sem a correção, 74 casos reprovam.
+
+### Adicionado
+
+- `?tema=claro` na vitrine do `yarn dev`, com as bases do tema claro do RoqueOS no `:root`.
+
 ## [0.6.0] - 2026-09-28
 
 ### Adicionado

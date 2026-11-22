@@ -36,6 +36,10 @@ flowchart LR
 - As cores vêm do tema do RoqueOS pelas variáveis que o contrato do `app-sdk` lista
   (`--ros-fill-rgb`, `--ros-text-rgb`...), sempre com um valor de reserva, para o app ficar
   igual no `yarn dev`, fora do RoqueOS. A cor do app entra por prop (`acento`).
+- O texto passa de 4,5:1 nos dois temas, escuro e claro. Sobre a cor do app o kit escolhe
+  branco ou preto; a cor do app como tinta (o botão ligado, o ícone da folha) vai misturada à
+  cor do texto do tema, que clareia no escuro e escurece no claro (`src/acento.js`).
+  `test/contraste.spec.js` mede a partir do CSS de cada componente.
 - O texto de cada componente vem por prop, já no idioma do app. O kit não tem idioma.
 
 ## Os componentes
@@ -119,7 +123,7 @@ import { RosFolha, RosInterruptor, RosVazio } from '@roqueos-apps/ui'
 ```bash
 yarn install --ignore-scripts
 yarn verificar   # lint, formato, testes e app check --sdk, o mesmo do CI e do pre-push
-yarn dev         # a vitrine, com cada componente nos estados que importam (?dir=rtl para o árabe)
+yarn dev         # a vitrine, com cada componente nos estados que importam (?dir=rtl, ?tema=claro)
 node scripts/icones.mjs <caminho do @quasar/extras> nome_do_icone   # ícone novo
 ```
 
@@ -129,6 +133,7 @@ node scripts/icones.mjs <caminho do @quasar/extras> nome_do_icone   # ícone nov
 src/
   index.js          o que o pacote exporta
   RosIcone.vue      RosBotao.vue  RosInterruptor.vue  RosFolha.vue  RosConfirmar.vue  RosVazio.vue
+  acento.js         a cor do app com contraste nos dois temas
   icones.js         os ícones (gerado por scripts/icones.mjs)
   foco.js           prenderFoco e focaveis, sem mexer no document
   sobreposicao.js   o foco da folha e da confirmação

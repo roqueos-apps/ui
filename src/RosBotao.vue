@@ -6,7 +6,7 @@
       `rui-botao--${variante}`,
       { 'rui-botao--so-icone': soIcone, 'rui-botao--ligado': ligado },
     ]"
-    :style="acento ? { '--rui-acento': acento } : null"
+    :style="estiloDoAcento(acento)"
     :aria-label="soIcone ? rotulo : undefined"
     :title="rotulo || undefined"
     :aria-pressed="ligado === null ? undefined : String(ligado)"
@@ -20,8 +20,15 @@
 // O botão dos apps. Três jeitos: `primario` (a ação principal, na cor do app), `fantasma`
 // (ação de barra, sem fundo) e `perigo` (apagar). Botão só de ícone precisa de `rotulo`:
 // é o que o leitor de tela lê e o que aparece ao passar o mouse.
+//
+// O texto de cada variante passa de 4,5:1 sobre o próprio fundo nos dois temas (o teste em
+// `test/contraste.spec.js` calcula a partir deste CSS). Sem `acento`, o primário é o azul de
+// preenchimento do RoqueOS (#0062cc) com texto branco, 5,8:1; com `acento`, `estiloDoAcento`
+// escolhe branco ou preto pela cor do app. O ligado pinta o ícone com o acento misturado à cor
+// do texto do tema, que clareia no escuro e escurece no claro.
 import { computed, useSlots } from 'vue'
 import RosIcone from './RosIcone.vue'
+import { estiloDoAcento } from './acento.js'
 
 const props = defineProps({
   variante: {
@@ -47,6 +54,8 @@ const soIcone = computed(() => Boolean(props.icone) && !slots.default)
 <style scoped>
 .rui-botao {
   --rui-acento-padrao: #007aff;
+  /* O azul de preenchimento do RoqueOS (`--ros-accent-fill-rgb`): branco em cima dá 5,8:1. */
+  --rui-acento-fundo-padrao: #0062cc;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -89,8 +98,8 @@ const soIcone = computed(() => Boolean(props.icone) && !slots.default)
 }
 
 .rui-botao--primario {
-  color: rgb(var(--ros-black-rgb, 0, 0, 0));
-  background: var(--rui-acento, var(--rui-acento-padrao));
+  color: var(--rui-acento-tinta, rgb(var(--ros-white-rgb, 255, 255, 255)));
+  background: var(--rui-acento, var(--rui-acento-fundo-padrao));
 }
 
 .rui-botao--primario:hover {
@@ -102,13 +111,23 @@ const soIcone = computed(() => Boolean(props.icone) && !slots.default)
 }
 
 .rui-botao--fantasma.rui-botao--ligado {
-  color: var(--rui-acento, var(--rui-acento-padrao));
+  color: color-mix(
+    in srgb,
+    var(--rui-acento, var(--rui-acento-padrao)) var(--rui-acento-mistura, 72%),
+    rgb(var(--ros-text-rgb, 255, 255, 255))
+  );
   background: rgba(var(--ros-fill-rgb, 255, 255, 255), 0.1);
 }
 
 .rui-botao--perigo {
   color: rgb(var(--ros-white-rgb, 255, 255, 255));
-  background: rgb(var(--ros-danger-rgb, 255, 59, 48));
+  /* O vermelho do escuro (255, 59, 48) dava 3,5:1 com branco; 80% dele com preto dá 5,2:1, e
+     o do claro (196, 0, 15) fica em 8,6:1. */
+  background: color-mix(
+    in srgb,
+    rgb(var(--ros-danger-rgb, 255, 59, 48)) 80%,
+    rgb(var(--ros-black-rgb, 0, 0, 0))
+  );
 }
 
 .rui-botao--perigo:hover {
