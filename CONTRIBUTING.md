@@ -25,7 +25,8 @@ here goes only what belongs to the kit.
 7. New icon: `node scripts/icones.mjs <path to @quasar/extras> icon_name`, in the same pull
    request as the component or app that uses it.
 8. Run `yarn verificar` before opening the pull request. It is what CI runs. `yarn dev` opens
-   the showcase, with each component in the states that matter (`?dir=rtl` for Arabic).
+   the showcase, with each component in the states that matter (`?dir=rtl` for Arabic,
+   `?tema=claro` for the light theme).
 
 The step by step for each kind of change is in [docs/EXTENDING.md](docs/EXTENDING.md), and what
 each test proves is in [docs/TESTING.md](docs/TESTING.md).

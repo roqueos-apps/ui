@@ -111,6 +111,16 @@ body {
   background: radial-gradient(circle at 30% 20%, #2b3a55, #11151d 70%);
 }
 
+html[data-tema='claro'] body {
+  color: #1c1c1e;
+  background: radial-gradient(circle at 30% 20%, #dfe7f5, #f4f4f7 70%);
+}
+
+html[data-tema='claro'] .janela {
+  background: #fafafc;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
 .vitrine {
   max-width: 720px;
   margin: 0 auto;

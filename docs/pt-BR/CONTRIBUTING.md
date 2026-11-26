@@ -24,7 +24,8 @@ aqui entra só o que é do kit.
 7. Ícone novo: `node scripts/icones.mjs <caminho do @quasar/extras> nome_do_icone`, no mesmo
    PR do componente ou do app que usa.
 8. Rode `yarn verificar` antes de abrir o PR. É o mesmo que o CI roda. `yarn dev` abre a
-   vitrine, com cada componente nos estados que importam (`?dir=rtl` para o árabe).
+   vitrine, com cada componente nos estados que importam (`?dir=rtl` para o árabe,
+   `?tema=claro` para o tema claro).
 
 O passo a passo de cada tipo de mudança está em [ESTENDER.md](ESTENDER.md), e o que cada teste
 prova, em [TESTES.md](TESTES.md).

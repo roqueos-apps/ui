@@ -3,7 +3,7 @@
     <div
       v-if="modelValue"
       class="rui-folha"
-      :style="acento ? { '--rui-acento': acento } : null"
+      :style="estiloDoAcento(acento)"
       @keydown.esc.stop.prevent="fechar"
     >
       <div class="rui-folha__veu" aria-hidden="true" @click="fechar" />
@@ -51,6 +51,7 @@
 // escuta só a alça, que prende o ponteiro: nada vai para o `window` nem para o `document`.
 import { ref, useId } from 'vue'
 import RosIcone from './RosIcone.vue'
+import { estiloDoAcento } from './acento.js'
 import RosBotao from './RosBotao.vue'
 import { useSobreposicao } from './sobreposicao.js'
 
@@ -157,7 +158,12 @@ useSobreposicao(() => props.modelValue, painel)
 }
 
 .rui-folha__icone {
-  color: var(--rui-acento, #007aff);
+  /* O acento misturado à cor do texto do tema: 4,5:1 nos dois (`src/acento.js`). */
+  color: color-mix(
+    in srgb,
+    var(--rui-acento, #007aff) var(--rui-acento-mistura, 72%),
+    rgb(var(--ros-text-rgb, 255, 255, 255))
+  );
 }
 
 .rui-folha__titulo {
