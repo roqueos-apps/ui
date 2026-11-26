@@ -8,6 +8,11 @@ versão menor; mudar o que um componente faz com a mesma prop, ou tirar uma, é 
 
 ### Mudado
 
+- A documentação segue o padrão da família (18/11/2026): inglês como principal em `docs/`, o par
+  em português em `docs/pt-BR/`, declarados em `docs/docs.json`. O `README.md` e o
+  `CONTRIBUTING.md` passam a ser em inglês; o português está em `README.pt-BR.md` e em
+  `docs/pt-BR/CONTRIBUTING.md`. Entram começar, arquitetura, referência, operação, quando
+  quebra, glossário, estender, integrações e testes, nos dois idiomas.
 - O repo abriu (29/09/2026). O README deixa de mandar instalar pela chave SSH: o `github:`
   baixa por HTTPS, sem chave, e é como as Notas, o QR Code, o Quadro Branco e a Câmera instalam o
   kit agora.

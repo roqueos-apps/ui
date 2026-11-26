@@ -1,78 +1,82 @@
 # ui
 
-O kit de interface dos apps do [RoqueOS](https://roqueos.com.br): o ícone pelo nome, o botão,
-o interruptor, a folha de ajustes, a confirmação e o estado vazio, para um app que mora fora
-do RoqueOS parecer e se comportar como um de dentro. Só Vue: sem Quasar e sem nada do
-RoqueOS.
+_[Português](README.pt-BR.md) | English_
 
-![A vitrine do kit no yarn dev: os ícones, os botões, o interruptor, o estado vazio e a folha de ajustes aberta](docs/capa.jpg)
+The interface kit for [RoqueOS](https://roqueos.com.br) apps: icon by name, button, switch,
+settings sheet, confirmation and empty state, so an app that lives outside RoqueOS looks and
+behaves like one inside it. Vue only: no Quasar and nothing from RoqueOS.
 
-_English below._
+![The kit showcase in yarn dev: the icons, the buttons, the switch, the empty state and the settings sheet open](docs/capa.jpg)
 
-## Por que existe
+## Why it exists
 
-Os apps do RoqueOS estão saindo do repositório do sistema, que é fechado, para repos próprios
-na organização [roqueos-apps](https://github.com/roqueos-apps), falando com ele pelo
-[`app-sdk`](https://github.com/roqueos-apps/app-sdk). Dentro do RoqueOS eles desenhavam a tela
-com os componentes do sistema (`ROSModal`, `ROSBottomSheet`, `q-icon`), que dependem do Quasar
-e das stores; fora, esses componentes não existem. Este kit é o que eles usam no lugar.
+RoqueOS apps are leaving the system repository, which is closed, for repositories of their own
+in the [roqueos-apps](https://github.com/roqueos-apps) organization, talking to it through the
+[`app-sdk`](https://github.com/roqueos-apps/app-sdk). Inside RoqueOS they drew the screen with
+the system components (`ROSModal`, `ROSBottomSheet`, `q-icon`), which depend on Quasar and on
+the stores; outside, those components do not exist. This kit is what they use instead.
 
-Ele nasceu com as Notas (Onda 4a do Goal 28, 27/09/2026) e cresce com o próximo app que
-precisar de mais: componente sem app que o use não se testa contra uso real.
+It was born with Notes (Wave 4a of Goal 28, 27/09/2026) and grows with the next app that needs
+more: a component with no app using it cannot be tested against real use.
 
-## Arquitetura
+## Architecture
 
 ```mermaid
 flowchart LR
-  K[ui<br/>componentes Vue] -->|dependência git, tag| A[App<br/>ex.: notas]
-  S[app-sdk<br/>VARIAVEIS_DO_SISTEMA] -->|as variáveis de tema que o kit pode usar| K
-  A -->|mount| R[RoqueOS<br/>tema, janela]
-  C[src/comportamento.js<br/>foco, Esc, Tab] -->|roda contra| K
-  C -->|roda contra| F[ROSModal e ROSBottomSheet<br/>no RoqueOS]
+  K[ui<br/>Vue components] -->|git dependency, tag| A[App<br/>e.g. notes]
+  S[app-sdk<br/>VARIAVEIS_DO_SISTEMA] -->|the theme variables the kit may use| K
+  A -->|mount| R[RoqueOS<br/>theme, window]
+  C[src/comportamento.js<br/>focus, Esc, Tab] -->|runs against| K
+  C -->|runs against| F[ROSModal and ROSBottomSheet<br/>in RoqueOS]
 ```
 
-- O app instala o kit como dependência git pinada por tag, e o Vite do RoqueOS compila o
-  fonte, como compila o app.
-- As cores vêm do tema do RoqueOS pelas variáveis que o contrato do `app-sdk` lista
-  (`--ros-fill-rgb`, `--ros-text-rgb`...), sempre com um valor de reserva, para o app ficar
-  igual no `yarn dev`, fora do RoqueOS. A cor do app entra por prop (`acento`).
-- O texto passa de 4,5:1 nos dois temas, escuro e claro. Sobre a cor do app o kit escolhe
-  branco ou preto; a cor do app como tinta (o botão ligado, o ícone da folha) vai misturada à
-  cor do texto do tema, que clareia no escuro e escurece no claro (`src/acento.js`).
-  `test/contraste.spec.js` mede a partir do CSS de cada componente.
-- O texto de cada componente vem por prop, já no idioma do app. O kit não tem idioma.
+- The app installs the kit as a git dependency pinned by tag, and the RoqueOS Vite build
+  compiles the source, as it compiles the app.
+- Colours come from the RoqueOS theme through the variables the `app-sdk` contract lists
+  (`--ros-fill-rgb`, `--ros-text-rgb`...), always with a fallback value, so the app looks the
+  same in `yarn dev`, outside RoqueOS. The app colour comes in as a prop (`acento`).
+- Text reaches 4.5:1 in both themes, dark and light. On the app colour the kit picks white or
+  black; the app colour used as ink (the switch when on, the sheet icon) is mixed with the
+  theme's text colour, which lightens in dark and darkens in light (`src/acento.js`).
+  `test/contraste.spec.js` measures it from each component's CSS.
+- The text of each component comes in through props, already in the app's language. The kit
+  has no language.
 
-## Os componentes
+The whole picture, with the flows and the design decisions, is in
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-| Componente       | Para quê                                                               | O que garante                                                                                                                    |
-| ---------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `RosIcone`       | ícone do Material Icons pelo nome (`nome`)                             | os traços da fonte que o RoqueOS usa; nome fora de `ICONES` é aviso do Vue; decorativo                                           |
-| `RosBotao`       | `primario`, `fantasma` ou `perigo`                                     | botão só de ícone leva `rotulo` como `aria-label`; alternar (`ligado`) diz `aria-pressed`                                        |
-| `RosInterruptor` | liga e desliga (`v-model`)                                             | `role="switch"` com `aria-checked`; Espaço, Enter e o OK da TV alternam; anda ao contrário em RTL                                |
-| `RosFolha`       | ajustes e escolhas, subindo de baixo                                   | diálogo modal com título; foco entra, fica e volta; Esc, véu, fechar e a alça arrastada para baixo fecham                        |
-| `RosConfirmar`   | a pergunta antes do que não tem volta                                  | `alertdialog`; abre com o foco no Cancelar; Esc e véu cancelam; `perigo` pinta de vermelho                                       |
-| `RosVazio`       | o estado vazio ("Nenhuma nota ainda"), e o carregando com `carregando` | `role="status"`, ícone na cor do app, ação no slot; `carregando` põe a barra que corre (parada com `leve` ou movimento reduzido) |
+## The components
 
-`prenderFoco(el)` e `focaveis(el)` também saem do pacote, para o app que precisar prender o
-foco num painel próprio.
+| Component        | What for                                                              | What it guarantees                                                                                                                   |
+| ---------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `RosIcone`       | a Material Icons icon by name (`nome`)                                | the strokes of the font RoqueOS uses; a name outside `ICONES` is a Vue warning; decorative                                           |
+| `RosBotao`       | `primario`, `fantasma` or `perigo`                                    | an icon-only button carries `rotulo` as `aria-label`; toggling (`ligado`) says `aria-pressed`                                        |
+| `RosInterruptor` | on and off (`v-model`)                                                | `role="switch"` with `aria-checked`; Space, Enter and the TV OK button toggle; moves the other way in RTL                            |
+| `RosFolha`       | settings and choices, rising from the bottom                          | modal dialog with a title; focus enters, stays and returns; Esc, the scrim, close and the handle dragged down close it               |
+| `RosConfirmar`   | the question before what cannot be undone                             | `alertdialog`; opens with focus on Cancel; Esc and the scrim cancel; `perigo` paints it red                                          |
+| `RosVazio`       | the empty state ("Nenhuma nota ainda"), and loading with `carregando` | `role="status"`, icon in the app colour, action in the slot; `carregando` adds the running bar (still with `leve` or reduced motion) |
 
-### O que o kit não faz, de propósito
+`prenderFoco(el)` and `focaveis(el)` also ship in the package, for the app that needs to trap
+focus in a panel of its own. Every prop, event and slot is in
+[docs/REFERENCE.md](docs/REFERENCE.md).
 
-A folha e a confirmação moram **dentro da raiz do app** (que precisa de `position: relative`)
-e cobrem a janela do app, não a tela. O kit nunca mexe no `document`: nenhum estilo no `body`,
-nenhum listener no `document` ou na `window`, nenhum Teleport. O RoqueOS trava a rolagem do
-`body` com um contador próprio quando abre um modal dele; um kit que também mexesse ali
-destravaria a rolagem do sistema por baixo de um modal aberto. O Esc de uma folha aberta
-também não sobe: com a folha aberta, o Esc é dela, não da janela.
+### What the kit does not do, on purpose
 
-### O mesmo comportamento dos dois lados
+The sheet and the confirmation live **inside the app root** (which needs `position: relative`)
+and cover the app window, not the screen. The kit never touches the `document`: no style on
+`body`, no listener on `document` or `window`, no Teleport. RoqueOS locks `body` scrolling with
+a counter of its own when it opens one of its modals; a kit that also touched it would unlock
+the system scroll under an open modal. Esc in an open sheet does not bubble either: with the
+sheet open, Esc belongs to it, not to the window.
 
-O RoqueOS continua com os componentes dele, e as duas famílias precisam se comportar igual.
-[`src/comportamento.js`](src/comportamento.js) é o contrato de comportamento executável de uma
-sobreposição: é diálogo modal para o leitor de tela, o foco entra ao abrir, o Esc fecha, o
-foco volta para quem abriu, e o Tab não sai dela. O kit passa em tudo; o RoqueOS roda o mesmo
-pacote contra o `ROSModal` e o `ROSBottomSheet`, e o que um lado ainda não cumpre fica
-escrito, com o motivo, na lista `pular` do teste dele.
+### The same behaviour on both sides
+
+RoqueOS keeps its own components, and the two families must behave alike.
+[`src/comportamento.js`](src/comportamento.js) is the executable behaviour contract of an
+overlay: it is a modal dialog to the screen reader, focus enters on open, Esc closes, focus
+returns to whoever opened it, and Tab does not leave it. The kit passes all of it; RoqueOS runs
+the same pack against `ROSModal` and `ROSBottomSheet`, and what one side does not meet yet is
+written down, with the reason, in the `pular` list of its test.
 
 ```js
 import { describe, test, expect } from 'vitest'
@@ -81,20 +85,20 @@ import { testarSobreposicao } from '@roqueos-apps/ui/comportamento'
 testarSobreposicao({ describe, test, expect }, { nome: 'RosFolha', montar })
 ```
 
-O que nenhum teste automático cobre é o aparelho: o foco com o D-pad da TV e a folha com o
-teclado do iPhone aberto entram no QA de aparelho de cada app.
+What no automated test covers is the device: focus with the TV D-pad and the sheet with the
+iPhone keyboard open go into each app's device QA.
 
-## Como usar num app
+## How to use it in an app
 
 ```json
-{ "dependencies": { "@roqueos-apps/ui": "github:roqueos-apps/ui#v0.1.0" } }
+{ "dependencies": { "@roqueos-apps/ui": "github:roqueos-apps/ui#v0.6.0" } }
 ```
 
-Sempre por tag, nunca por branch. O `github:` baixa por HTTPS e não pede chave.
+Always by tag, never by branch. `github:` downloads over HTTPS and asks for no key.
 
 ```vue
 <template>
-  <div class="meu-app">
+  <div class="my-app">
     <RosVazio v-if="vazio" icone="sticky_note_2" :titulo="t('vazio')" acento="#f59e0b" />
     <RosFolha v-model="ajustes" :titulo="t('ajustes')" :rotulo-fechar="t('fechar')">
       <RosInterruptor v-model="naMesa" :rotulo="t('naMesa')" acento="#f59e0b" />
@@ -107,82 +111,80 @@ import { RosFolha, RosInterruptor, RosVazio } from '@roqueos-apps/ui'
 </script>
 
 <style>
-.meu-app {
-  position: relative; /* a folha e a confirmação se prendem aqui */
+.my-app {
+  position: relative; /* the sheet and the confirmation attach here */
 }
 </style>
 ```
 
-## Pré-requisitos
+The package surface (the two exports, the tag, the single copy RoqueOS forces) is in
+[docs/INTEGRATIONS.md](docs/INTEGRATIONS.md).
 
-- Node 22 ou mais novo (o `.nvmrc` diz 24).
-- Yarn 1 (`packageManager` no `package.json`).
+## Getting started
 
-## Como rodar
+Node 22 or newer (`.nvmrc` says 24) and Yarn 1 (`packageManager` in `package.json`).
 
 ```bash
 yarn install --ignore-scripts
-yarn verificar   # lint, formato, testes e app check --sdk, o mesmo do CI e do pre-push
-yarn dev         # a vitrine, com cada componente nos estados que importam (?dir=rtl, ?tema=claro)
-node scripts/icones.mjs <caminho do @quasar/extras> nome_do_icone   # ícone novo
+yarn verificar   # lint, format, tests and app check --sdk, the same as CI and pre-push
+yarn dev         # the showcase, each component in the states that matter (?dir=rtl, ?tema=claro)
+node scripts/icones.mjs <path to @quasar/extras> icon_name   # new icon
 ```
 
-## Estrutura
+Step by step, with how to know each command worked, in
+[docs/GETTING-STARTED.md](docs/GETTING-STARTED.md).
+
+## Structure
 
 ```text
 src/
-  index.js          o que o pacote exporta
+  index.js          what the package exports
   RosIcone.vue      RosBotao.vue  RosInterruptor.vue  RosFolha.vue  RosConfirmar.vue  RosVazio.vue
-  acento.js         a cor do app com contraste nos dois temas
-  icones.js         os ícones (gerado por scripts/icones.mjs)
-  foco.js           prenderFoco e focaveis, sem mexer no document
-  sobreposicao.js   o foco da folha e da confirmação
-  comportamento.js  o contrato de comportamento executável de uma sobreposição
-scripts/icones.mjs  gera src/icones.js a partir do @quasar/extras
-dev/                a vitrine do yarn dev
-test/               Vitest com jsdom: componentes, comportamento, documento, regras
+  acento.js         the app colour with contrast in both themes
+  icones.js         the icons (generated by scripts/icones.mjs)
+  foco.js           prenderFoco and focaveis, without touching the document
+  sobreposicao.js   the focus of the sheet and the confirmation
+  comportamento.js  the executable behaviour contract of an overlay
+scripts/icones.mjs  generates src/icones.js from @quasar/extras
+dev/                the yarn dev showcase
+test/               Vitest with jsdom: components, behaviour, document, rules
 ```
 
-## Onde ele se encaixa na família
+## Where it fits in the family
 
-O `app-sdk` define o contrato entre o RoqueOS e um app, inclusive as variáveis de tema que o
-kit usa. O kit depende disso e de mais nada; os apps dependem dos dois. Quando o kit precisa
-de uma variável de tema nova, ela entra primeiro no `app-sdk` (e o RoqueOS passa a reprovar
-se ela sumir do tema), depois no kit, depois no app. A ordem está no grafo do `roqueos-kit`
-(`roqueos-graph blast`).
+The `app-sdk` defines the contract between RoqueOS and an app, including the theme variables the
+kit uses. The kit depends on that and on nothing else; the apps depend on both. When the kit
+needs a new theme variable, it goes into the `app-sdk` first (and RoqueOS starts failing if it
+disappears from the theme), then into the kit, then into the app. The order is in the
+`roqueos-kit` graph (`roqueos-graph blast`).
 
-## Contribuir
+## Status and limits
 
-Leia o [CONTRIBUTING.md](CONTRIBUTING.md). Todo commit leva `Signed-off-by` (DCO), e o CI
-confere. Falha de segurança vai pelo [SECURITY.md](SECURITY.md), nunca por issue pública.
+Version 0.6.0 ([CHANGELOG.md](CHANGELOG.md)), used by Notes, QR Code, Whiteboard (Lousa) and
+Camera, and by RoqueOS itself, which runs the behaviour pack against its own overlays. Six
+components and 70 icons. The gate runs in jsdom; what only a real device shows (TV D-pad,
+iPhone keyboard) is manual QA in each app. The known limits are in
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#9-known-limits).
 
-## Licença
+## Documentation
 
-[MIT](LICENSE). Os ícones são do Material Icons (Apache-2.0); a origem está no
-[ASSETS.md](ASSETS.md). O nome e a marca RoqueOS são da LEVELHARD e não fazem parte da licença.
+Start at [docs/INDEX.md](docs/INDEX.md), the map from what you want to the document that
+answers it. In it: [getting started](docs/GETTING-STARTED.md),
+[architecture](docs/ARCHITECTURE.md), [reference](docs/REFERENCE.md),
+[operations](docs/OPERATIONS.md), [when it breaks](docs/WHEN-IT-BREAKS.md),
+[glossary](docs/GLOSSARY.md), [extending](docs/EXTENDING.md),
+[integrations](docs/INTEGRATIONS.md) and [testing](docs/TESTING.md). Every document has its
+Portuguese pair in [docs/pt-BR/](docs/pt-BR/INDEX.md).
 
----
+## Contributing
 
-## English
+Read [CONTRIBUTING.md](CONTRIBUTING.md). Every commit carries `Signed-off-by` (DCO), and CI
+checks it. A security flaw goes through [SECURITY.md](SECURITY.md), never through a public
+issue. Code, comments and commits are in Brazilian Portuguese; English issues and pull requests
+are welcome.
 
-`ui` is the interface kit for [RoqueOS](https://roqueos.com.br) apps: icon by name, button,
-switch, settings sheet, confirmation and empty state, so an app living outside RoqueOS looks
-and behaves like one inside it. Vue only: no Quasar and nothing from RoqueOS.
+## License
 
-- Apps depend on it as a git dependency pinned by tag; the RoqueOS Vite build compiles the
-  source.
-- Colours follow the RoqueOS theme through the CSS variables listed by the `app-sdk` contract,
-  always with a fallback so the app looks the same in `yarn dev`. The app colour comes in as a
-  prop (`acento`); on-screen text comes in through props, already translated.
-- `RosFolha` and `RosConfirmar` live inside the app root (which needs `position: relative`)
-  and never touch the document: no `body` styles, no `document`/`window` listeners, no
-  Teleport. Focus enters, stays and returns; Escape closes and does not bubble to the window.
-- `src/comportamento.js` is an executable overlay behaviour contract (dialog role, focus in,
-  Escape closes, focus returns, Tab wraps). The kit passes all of it; RoqueOS runs the same
-  pack against its own `ROSModal` and `ROSBottomSheet`, recording any gap with its reason.
-
-Run `yarn install --ignore-scripts` and `yarn verificar`; CI runs the same command. `yarn dev`
-opens a component showcase. Code, comments and commits are in Brazilian Portuguese; English
-issues and pull requests are welcome. Every commit must be signed off (DCO). Licensed under
-[MIT](LICENSE); icons are Material Icons (Apache-2.0); the RoqueOS name and brand belong to
-LEVELHARD and are not covered.
+[MIT](LICENSE). The icons are Material Icons (Apache-2.0); their origin is in
+[ASSETS.md](ASSETS.md). The RoqueOS name and brand belong to LEVELHARD and are not part of the
+license.
